@@ -1,0 +1,15 @@
+# Blackbox Development Logger - Dependencies
+
+# Core Framework
+fastapi==0.121.3
+uvicorn[standard]==0.38.0
+
+# Database
+sqlmodel==0.0.27
+sqlalchemy==2.0.44
+
+# HTTP Client (for CLI)
+requests==2.32.5
+
+# Utilities
+python-dotenv==1.0.0

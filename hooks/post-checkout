@@ -1,0 +1,29 @@
+#!/bin/sh
+# Post-checkout hook for Blackbox - logs branch switches and checkouts
+# This hook runs after git checkout
+
+PREVIOUS_HEAD=$1
+NEW_HEAD=$2
+BRANCH_SWITCH=$3
+
+PROJECT_NAME=$(basename "$(git rev-parse --show-toplevel)" 2>/dev/null || echo "unknown")
+GIT_USER=$(git config user.name 2>/dev/null || echo "unknown")
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
+
+SCRIPT_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
+DEVLOG="$SCRIPT_DIR/devlog.py"
+
+if [ ! -f "$DEVLOG" ]; then
+    DEVLOG="$(pwd)/devlog.py"
+fi
+
+if [ -f "$DEVLOG" ] && [ "$BRANCH_SWITCH" = "1" ]; then
+    python "$DEVLOG" auto-event \
+        --project "$PROJECT_NAME" \
+        --type "info" \
+        --message "Switched to branch: $CURRENT_BRANCH" \
+        --git-user "$GIT_USER" \
+        >/dev/null 2>&1 || true
+fi
+
+exit 0

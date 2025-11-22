@@ -1,0 +1,25 @@
+#!/bin/sh
+# Pre-commit hook for Blackbox - logs when commits are about to happen
+# This hook runs before the commit is created
+
+PROJECT_NAME=$(basename "$(git rev-parse --show-toplevel)" 2>/dev/null || echo "unknown")
+GIT_USER=$(git config user.name 2>/dev/null || echo "unknown")
+STAGED_FILES=$(git diff --cached --name-only | wc -l)
+
+SCRIPT_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
+DEVLOG="$SCRIPT_DIR/devlog.py"
+
+if [ ! -f "$DEVLOG" ]; then
+    DEVLOG="$(pwd)/devlog.py"
+fi
+
+if [ -f "$DEVLOG" ]; then
+    python "$DEVLOG" auto-event \
+        --project "$PROJECT_NAME" \
+        --type "info" \
+        --message "Committing $STAGED_FILES file(s)" \
+        --git-user "$GIT_USER" \
+        >/dev/null 2>&1 || true
+fi
+
+exit 0
