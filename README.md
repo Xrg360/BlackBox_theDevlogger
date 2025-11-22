@@ -17,7 +17,7 @@ pip install -e .
 blackbox-server
 
 # Use the CLI (in another terminal)
-devlog user create "Alice"
+devlog user create "Rohit"
 devlog stats
 
 # Install git hooks for automatic tracking
@@ -35,7 +35,7 @@ pip install -r requirements.txt
 python start_server.py
 
 # Use the CLI (in another terminal)
-python devlog.py user create "Alice"
+python devlog.py user create "Rohit"
 
 # Install git hooks
 .\install-hooks.ps1  # Windows
@@ -110,7 +110,7 @@ git checkout -b new-feature
 
 ```bash
 # Create user and project
-devlog user create "Alice"
+devlog user create "Rohit"
 devlog project create "My App" --owner-id 1
 
 # Start a session
@@ -134,7 +134,7 @@ curl http://localhost:8000/health
 # Create user via API
 curl -X POST http://localhost:8000/users \
   -H "Content-Type: application/json" \
-  -d '{"username": "Alice"}'
+  -d '{"username": "Rohit"}'
 ```
 
 **Interactive API Docs:** http://localhost:8000/docs
@@ -184,7 +184,7 @@ chmod +x install-hooks.sh
 ```json
 {
   "commit_hash": "a3f5c2d",
-  "git_user": "alice",
+  "git_user": "Rohit",
   "message": "Added authentication"
 }
 ```
@@ -228,7 +228,7 @@ After installing with `pip install -e .`:
 
 **Examples:**
 ```bash
-devlog user create "Alice"          # Create user
+devlog user create "Rohit"          # Create user
 devlog project create "My App"      # Create project
 devlog session start --project-id 1 # Start session
 devlog event log --type info --message "Working" --project-id 1
