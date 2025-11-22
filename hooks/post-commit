@@ -1,0 +1,44 @@
+#!/bin/sh
+# Post-commit hook for Blackbox - automatically logs git commits as events
+# This hook runs after every git commit to track development activity
+
+# Get project info
+PROJECT_NAME=$(basename "$(git rev-parse --show-toplevel)" 2>/dev/null || echo "unknown")
+COMMIT_MSG=$(git log -1 --pretty=%B 2>/dev/null || echo "commit")
+COMMIT_HASH=$(git log -1 --pretty=%h 2>/dev/null || echo "")
+GIT_USER=$(git config user.name 2>/dev/null || echo "unknown")
+
+# Find devlog.py (check multiple locations)
+SCRIPT_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
+DEVLOG="$SCRIPT_DIR/devlog.py"
+
+if [ ! -f "$DEVLOG" ]; then
+    # Try alternative paths
+    DEVLOG="$(pwd)/devlog.py"
+fi
+
+# Find Python executable (try virtualenv first, then system Python)
+if [ -f "$SCRIPT_DIR/env/Scripts/python.exe" ]; then
+    PYTHON="$SCRIPT_DIR/env/Scripts/python.exe"
+elif [ -f "$SCRIPT_DIR/env/bin/python" ]; then
+    PYTHON="$SCRIPT_DIR/env/bin/python"
+elif command -v python3 >/dev/null 2>&1; then
+    PYTHON="python3"
+elif command -v python >/dev/null 2>&1; then
+    PYTHON="python"
+else
+    # Python not found, exit silently
+    exit 0
+fi
+
+if [ -f "$DEVLOG" ]; then
+    # Send commit event to blackbox (suppress output)
+    "$PYTHON" "$DEVLOG" auto-commit \
+        --project "$PROJECT_NAME" \
+        --message "$COMMIT_MSG" \
+        --commit-hash "$COMMIT_HASH" \
+        --git-user "$GIT_USER" \
+        >/dev/null 2>&1 || true
+fi
+
+exit 0
