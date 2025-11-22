@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "blackbox-devlog"
+version = "1.0.0"
+description = "Automatic development activity tracker with git integration"
+readme = "README.md"
+authors = [
+    {name = "Your Name", email = "your.email@example.com"}
+]
+license = {text = "MIT"}
+requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+keywords = ["development", "logging", "git", "tracking", "devops"]
+
+dependencies = [
+    "fastapi>=0.121.3",
+    "uvicorn[standard]>=0.38.0",
+    "sqlmodel>=0.0.27",
+    "sqlalchemy>=2.0.44",
+    "requests>=2.32.5",
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.2",
+    "pytest-asyncio>=0.24.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/blackbox-devlog"
+Documentation = "https://github.com/yourusername/blackbox-devlog#readme"
+Repository = "https://github.com/yourusername/blackbox-devlog"
+Issues = "https://github.com/yourusername/blackbox-devlog/issues"
+
+[project.scripts]
+devlog = "blackbox.cli:main"
+blackbox-server = "blackbox.server:main"
+blackbox-check = "blackbox.check:main"
+
+[tool.setuptools]
+packages = ["blackbox", "blackbox.backend"]
+
+[tool.setuptools.package-data]
+blackbox = ["hooks/*", ".env.example"]

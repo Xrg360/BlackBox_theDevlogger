@@ -9,7 +9,7 @@ import sys
 from pathlib import Path
 
 # Add parent directory to path for config import
-sys.path.insert(0, str(Path(__file__).parent.parent))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from .models import (
     User, Project, Session, CodeSnippet, Run, Event,
@@ -105,6 +105,16 @@ def root():
 @app.get("/health", tags=["Health"])
 def health_check():
     """Detailed health check endpoint"""
+    return {
+        "status": "healthy",
+        "database": "not_checked",
+        "timestamp": datetime.utcnow().isoformat(),
+        "message": "Use /health/full for database check"
+    }
+
+@app.get("/health/full", tags=["Health"])
+def health_check_full():
+    """Full health check with database test"""
     try:
         # Test database connection
         with get_session() as s:

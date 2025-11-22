@@ -1,0 +1,7 @@
+include README.md
+include LICENSE
+include .env.example
+include requirements.txt
+include requirements-dev.txt
+recursive-include hooks *
+recursive-include blackbox/backend *.py

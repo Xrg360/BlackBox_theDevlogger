@@ -7,6 +7,26 @@
 
 ## 🚀 Quick Start
 
+### Option 1: Install as Package (Recommended)
+
+```bash
+# Install the package
+pip install -e .
+
+# Start the server
+blackbox-server
+
+# Use the CLI (in another terminal)
+devlog user create "Alice"
+devlog stats
+
+# Install git hooks for automatic tracking
+.\install-hooks.ps1  # Windows
+./install-hooks.sh   # Linux/Mac
+```
+
+### Option 2: Run Directly (Without Installation)
+
 ```bash
 # Install dependencies
 pip install -r requirements.txt
@@ -14,7 +34,10 @@ pip install -r requirements.txt
 # Start the server
 python start_server.py
 
-# Install git hooks for automatic tracking (optional)
+# Use the CLI (in another terminal)
+python devlog.py user create "Alice"
+
+# Install git hooks
 .\install-hooks.ps1  # Windows
 ./install-hooks.sh   # Linux/Mac
 ```
@@ -25,10 +48,34 @@ python start_server.py
 
 - 🤖 **Auto-tracking** - Git hooks capture commits, branches, and activity
 - 📊 **Rich Metrics** - Track sessions, runs, events, and code snippets
-- 🔧 **Powerful CLI** - Full control with `devlog.py` commands
+- 🔧 **Powerful CLI** - Simple commands: `devlog` instead of `python devlog.py`
 - 🌐 **REST API** - Complete API at `http://localhost:8000/docs`
 - 📈 **Statistics** - Comprehensive analytics and insights
+- 📦 **Easy Install** - Install once with `pip install -e .`
 - 🐳 **Production Ready** - Docker support, configurable, tested
+
+## 📦 Installation
+
+Three ways to install:
+
+### 1. Install as Package (Best for Users)
+```bash
+pip install -e .
+# Commands available: devlog, blackbox-server, blackbox-check
+```
+
+### 2. Install from PyPI (When Published)
+```bash
+pip install blackbox-devlog
+```
+
+### 3. Use Directly (Development)
+```bash
+pip install -r requirements.txt
+# Use: python devlog.py, python start_server.py
+```
+
+See **[INSTALL.md](INSTALL.md)** for detailed installation guide.
 
 ## 📖 Usage
 
@@ -63,18 +110,20 @@ git checkout -b new-feature
 
 ```bash
 # Create user and project
-python devlog.py user create "Alice"
-python devlog.py project create "My App" --owner-id 1
+devlog user create "Alice"
+devlog project create "My App" --owner-id 1
 
 # Start a session
-python devlog.py session start --project-id 1
+devlog session start --project-id 1
 
 # Log events
-python devlog.py event log --project-id 1 --type info --message "Started refactoring"
+devlog event log --project-id 1 --type info --message "Started refactoring"
 
 # View statistics
-python devlog.py stats
+devlog stats
 ```
+
+**Note:** If you haven't installed the package, use `python devlog.py` instead of `devlog`.
 
 ### API
 
@@ -162,16 +211,45 @@ python -m pytest tests/ -v
 
 ## 📚 Documentation
 
+- **[Installation Guide](INSTALL.md)** - Complete installation instructions
 - **[Detailed Documentation](DetailedReadme.md)** - Complete guide with all commands
 - **[Improvements Summary](IMPROVEMENTS.md)** - Recent enhancements
 - **[API Docs](http://localhost:8000/docs)** - Interactive API reference (server must be running)
 
+## 🛠️ Available Commands
+
+After installing with `pip install -e .`:
+
+| Command | Old Way | Description |
+|---------|---------|-------------|
+| `devlog` | `python devlog.py` | Main CLI tool |
+| `blackbox-server` | `python start_server.py` | Start API server |
+| `blackbox-check` | `python check_setup.py` | Run health checks |
+
+**Examples:**
+```bash
+devlog user create "Alice"          # Create user
+devlog project create "My App"      # Create project
+devlog session start --project-id 1 # Start session
+devlog event log --type info --message "Working" --project-id 1
+devlog stats                         # View statistics
+```
+
 ## 🛠️ Troubleshooting
+
+**Command not found: `devlog`?**
+```bash
+# Install the package first
+pip install -e .
+
+# Or use the old way
+python devlog.py --help
+```
 
 **Server won't start?**
 ```bash
 pip install -r requirements.txt
-python check_setup.py  # Diagnostic tool
+blackbox-check  # Or: python check_setup.py
 ```
 
 **Git hooks not working?**
@@ -179,11 +257,14 @@ python check_setup.py  # Diagnostic tool
 # Reinstall hooks
 .\install-hooks.ps1  # Windows
 ./install-hooks.sh   # Linux/Mac
+
+# Ensure server is running
+blackbox-server  # Or: python start_server.py
 ```
 
 **API connection errors?**
-- Ensure server is running: `python start_server.py`
-- Check API URL: `http://localhost:8000/health`
+- Ensure server is running: `blackbox-server`
+- Check health: `curl http://localhost:8000/health`
 
 ## 🚀 Production Deployment
 
@@ -201,7 +282,7 @@ gunicorn -w 4 -k uvicorn.workers.UvicornWorker backend.main:app
 ## 📊 Example Output
 
 ```bash
-$ python devlog.py stats
+$ devlog stats
 
 📊 Blackbox Statistics
 ========================
@@ -227,10 +308,11 @@ Runs by Status:
 ## 🎯 What Makes This Special
 
 1. **Zero-overhead tracking** - Git hooks work silently in the background
-2. **Complete audit trail** - Every commit, run, and event is logged
-3. **Developer-friendly** - CLI is intuitive, API is well-documented
-4. **Production-ready** - Pagination, health checks, CORS, logging
-5. **Extensible** - Easy to add custom event types and metadata
+2. **Simple commands** - Just `devlog` instead of `python devlog.py`
+3. **Easy installation** - One `pip install -e .` and you're done
+4. **Complete audit trail** - Every commit, run, and event is logged
+5. **Production-ready** - Pagination, health checks, CORS, logging
+6. **Extensible** - Easy to add custom event types and metadata
 
 ## 🤝 Contributing
 
